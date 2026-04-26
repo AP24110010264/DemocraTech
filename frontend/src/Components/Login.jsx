@@ -5,16 +5,16 @@ import logo from '../assets/logo.gif'
 import '../Styles/Login.css'
 
 const Login = () => {
-    let [formData, setFormData] = useState({      //state hook formdata
+    let [formData, setFormData] = useState({      
         voter_id: "",
         password: "",
     });
     let [loginData, setLoginData] = useState()
-    let [errors, setErrors] = useState({});     //state for errors
-    let navigateFunc = useNavigate()        //hook to navigate on form submission
+    let [errors, setErrors] = useState({});    
+    let navigateFunc = useNavigate()       
     let [isLoading, setIsLoading] = useState(false)
 
-    const onChangeHandler = ({ target }) => {       //onchange handler
+    const onChangeHandler = ({ target }) => {      
         let { name, value } = target;
         setFormData({ ...formData, [name]: value.trim() })
 
@@ -30,22 +30,10 @@ const Login = () => {
         return errors
     }
 
-    // useEffect(() => {
-    //     try {
-    //         let fetch = async () => {
-    //             let { data } = await axios.post("http://localhost:4000/api/onlinevoting/login", { ...formData })
-    //             setLoginData(data)
-    //         }
-    //         fetch()
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }, [login])
-
-    const onSubmitHandler = async (e) => {       //onsubmit handler
+    const onSubmitHandler = async (e) => {      
         e.preventDefault();
         let validation = validateLoginForm(formData);
-        if (Object.keys(validation).length > 0) {       //Stopping submission if form not validated
+        if (Object.keys(validation).length > 0) {      
             setErrors(validation)
             return
         }
@@ -55,7 +43,7 @@ const Login = () => {
             setLoginData(data)
             setIsLoading(false)
 
-            if (data?.data?.role === "admin") {     //Navigating to admin component if the role is admin
+            if (data?.data?.role === "admin") {     
                 navigateFunc('/Admin', { state: data })
             } else {
                 navigateFunc('/Voting', { state: data })

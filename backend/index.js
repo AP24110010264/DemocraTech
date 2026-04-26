@@ -4,36 +4,37 @@ const cors = require('cors')
 let onlineVotingRoutes = require('./routes/onlinevoting.route');
 let votingRoutes = require('./routes/voter.route')
 require('dotenv').config()
+
 const port = process.env.PORT || 4000;
 
-let app = express()     //creating express application
+let app = express()   
 app.use(cors(
     {
         origin: "http://localhost:5173",
         methods: ['GET', 'POST', 'DELETE', 'PUT'],
         credentials: true
     }
-))     //alowing access to all the ports
+))     
 
-app.use(express.json({ limit: "10mb" }))     //to fetch req.body data
-let startingServer = async () => {      //server starting
+app.use(express.json({ limit: "10mb" }))     
+let startingServer = async () => {     
     try {
-        await connectDB(process.env.MONGODB_URL)       //connecting to database
+        await connectDB(process.env.MONGODB_URL)      
         console.log("database connected successfully");
-        app.listen(port, () => {        //listening or starting server
+        app.listen(port, () => {      
             console.log("server is running");
         })
     } catch (error) {
         console.log(error);
     }
 }
-app.use('/api/onlinevoting', onlineVotingRoutes)      //main route
-app.use('/api/onlinevoting', votingRoutes)      //voting route
+app.use('/api/onlinevoting', onlineVotingRoutes)     
+app.use('/api/onlinevoting', votingRoutes)     
 
-app.use('*', (req, res, next) => {      //wild card route
+app.use('*', (req, res, next) => {      
     res.status(200).json("File not found")
 })
-app.use((err, req, res, next) => {      //error handling middleware or route
+app.use((err, req, res, next) => {     
     res.status(500).json({ error: true, message: err.message })
 })
 
